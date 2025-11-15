@@ -22,6 +22,10 @@ public class EntityContext
     private List<StudentEntity> GetStudents => _studentsProvider.Load();
     private List<GroupEntity> GetGroups => _groupsProvider.Load();
     private List<DormitoryEntity> GetDormitories => _dormitoriesProvider.Load();
+    
+    public void SaveStudents(List<StudentEntity> students) => _studentsProvider.Save(students);
+    public void SaveGroups(List<GroupEntity> groups) => _groupsProvider.Save(groups);
+    public void SaveDormitory(List<DormitoryEntity> dormitory) => _dormitoriesProvider.Save(dormitory);
 
     public void AddStudent(StudentEntity student)
     {
@@ -40,9 +44,23 @@ public class EntityContext
     {
         return _studentsProvider.Load();
     }
+    
 
-    public void SaveStudents(List<StudentEntity> students)
+    public void AddGroup(GroupEntity group)
     {
-        _studentsProvider.Save(students);
+        var groups = GetGroups.ToList();
+        groups.Add(group);
+        _groupsProvider.Save(groups);
+    }
+
+    public GroupEntity? GetGroupById(string groupName)
+    {
+        var groups = GetGroups.ToList();
+        return groups.FirstOrDefault(g => g.GroupName == groupName);
+    }
+
+    public List<GroupEntity> AllGroups()
+    {
+        return _groupsProvider.Load();
     }
 }

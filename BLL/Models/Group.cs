@@ -1,4 +1,5 @@
 namespace BLL.Models;
+using System.Text.RegularExpressions;
 
 public class Group
 {
@@ -20,5 +21,13 @@ public class Group
         }
         student.GroupId = null;
         StudentsId.Remove(student.StudentId);
+    }
+
+    public void Validate()
+    {
+        if (!Regex.IsMatch(GroupName, @"^[А-Я]{1}-\d{3}-\d{2}-\d{1}-[А-Я]{2}$"))
+        {
+            throw new ArgumentException("Group id must be the format \"Б-121-24-2-ПІ\"");
+        }
     }
 }
