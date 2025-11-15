@@ -19,7 +19,7 @@ public class Group
         {
             throw new ArgumentException("Student not found");
         }
-        student.GroupId = null;
+        student.MoveOut();
         StudentsId.Remove(student.StudentId);
     }
 

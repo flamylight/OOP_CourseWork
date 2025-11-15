@@ -25,22 +25,20 @@ public class GroupService
 
     public void RemoveGroup(string groupName)
     {
-        var groups = _context.AllGroups().Select(g => g.ToBLL()).ToList();
-        var group = groups.FirstOrDefault(g => g.GroupName == groupName);
-        if (group == null)
-        {
-            throw new Exception("Group not found");
-        }
+        var groups = _context.AllGroups();
+        var group = groups.FirstOrDefault(g => g.GroupName == groupName) ??
+                    throw new Exception("Group not found");
+        
         var students = _context.AllStudents().Select(s => s.ToBLL()).ToList();
         foreach (var student in students)
         {
             if (student.GroupId != null && student.GroupId.GroupName == group.GroupName)
             {
-                group.RemoveStudent(student);
+                group.ToBLL().RemoveStudent(student);
             }
         }
         groups.Remove(group);
-        _context.SaveGroups(groups.Select(g => g.ToDAL()).ToList());
+        _context.SaveGroups(groups);
     }
 
     public List<Group> GetGroups()

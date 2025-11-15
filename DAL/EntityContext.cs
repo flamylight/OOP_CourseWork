@@ -21,7 +21,7 @@ public class EntityContext
 
     private List<StudentEntity> GetStudents => _studentsProvider.Load();
     private List<GroupEntity> GetGroups => _groupsProvider.Load();
-    private List<DormitoryEntity> GetDormitories => _dormitoriesProvider.Load();
+    public List<DormitoryEntity> GetDormitories => _dormitoriesProvider.Load();
     
     public void SaveStudents(List<StudentEntity> students) => _studentsProvider.Save(students);
     public void SaveGroups(List<GroupEntity> groups) => _groupsProvider.Save(groups);
@@ -62,5 +62,32 @@ public class EntityContext
     public List<GroupEntity> AllGroups()
     {
         return _groupsProvider.Load();
+    }
+
+    public void AddDormitory(DormitoryEntity dormitory)
+    {
+        var dormitories = GetDormitories.ToList();
+        dormitories.Add(dormitory);
+        _dormitoriesProvider.Save(dormitories);
+    }
+    
+    public DormitoryEntity? GetDormitoryById(int dormitoriesId)
+    {
+        var dormitories = GetDormitories.ToList();
+        return dormitories.FirstOrDefault(d => d.Id == dormitoriesId);
+    }
+
+    public void RemoveDormitory(DormitoryEntity dormitory)
+    {
+        var dormitories = GetDormitories.ToList();
+        foreach (var dor in dormitories)
+        {
+            if (dor.Id == dormitory.Id)
+            {
+                dormitories.Remove(dor);
+                _dormitoriesProvider.Save(dormitories);
+                break;
+            }
+        }
     }
 }

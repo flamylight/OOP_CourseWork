@@ -44,4 +44,10 @@ public class Student
         }
         
     }
+
+    public void MoveOut()
+    {
+        DormitoryId = null;
+        RoomId = 0;
+    }
 }

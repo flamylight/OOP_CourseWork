@@ -8,9 +8,14 @@ public class Dormitory
 
     public Dormitory(){}
     
-    public Dormitory(int id)
+    public Dormitory(int id, int rooms)
     {
         Id = id;
+
+        for (int i = 0; i < rooms; i++)
+        {
+            Rooms.Add(new Room(i));
+        }
     }
 
     public void AddStudent(Student student)
@@ -24,6 +29,7 @@ public class Dormitory
             if (room.CountStudents < 4)
             {
                 room.AddStudent(student);
+                student.DormitoryId = this;
             }
         }
     }
