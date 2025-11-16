@@ -12,8 +12,8 @@ public static class StudentBLLDAL
             LastName = bll.LastName,
             StudentId = bll.StudentId,
             Course = bll.Course,
-            DormitoryId = bll.DormitoryId.ToDAL(),
-            GroupId = bll.GroupId.ToDAL()
+            DormitoryId = bll.DormitoryId?.ToDAL(),
+            GroupId = bll.GroupId?.ToDAL()
         };
     }
 
@@ -25,8 +25,8 @@ public static class StudentBLLDAL
             LastName = dal.LastName,
             StudentId = dal.StudentId,
             Course = dal.Course,
-            DormitoryId = dal.DormitoryId.ToBLL(),
-            GroupId = dal.GroupId.ToBLL()
+            DormitoryId = dal.DormitoryId?.ToBLL(),
+            GroupId = dal.GroupId?.ToBLL()
         };
     }
 }

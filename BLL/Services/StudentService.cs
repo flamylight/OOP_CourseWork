@@ -14,8 +14,9 @@ public class StudentService
         _context = context;
     }
 
-    public void AddStudent(Student student)
+    public void AddStudent(string name, string lastName, int course, string studentId)
     {
+        var student = new Student(name, lastName, course, studentId);
         student.Validate();
         var dalStudent = _context.GetById(student.StudentId);
         if (dalStudent != null)
@@ -40,7 +41,7 @@ public class StudentService
         {
             student.GroupId.RemoveStudent(student);
         }
-        _context.SaveStudents(allStudents.Select(s => s.ToDAL()).ToList());
+        _context.RemoveStudent(student.ToDAL());
     }
 
     public List<Student> AllStudents()
@@ -50,7 +51,7 @@ public class StudentService
 
     public Student GetStudent(string studentId)
     {
-        return _context.GetById(studentId).ToBLL() ??
+        return _context.GetById(studentId)?.ToBLL() ??
                throw new Exception("Student not found");;
     }
     

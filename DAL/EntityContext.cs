@@ -90,4 +90,18 @@ public class EntityContext
             }
         }
     }
+
+    public void RemoveStudent(StudentEntity student)
+    {
+        var students = GetStudents.ToList();
+        foreach (var stud in students)
+        {
+            if (stud.StudentId == student.StudentId)
+            {
+                students.Remove(stud);
+                _studentsProvider.Save(students);
+                break;
+            }
+        }
+    }
 }
