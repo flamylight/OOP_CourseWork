@@ -5,7 +5,6 @@ using BLL.Services;
 using DAL.Entities;
 using BLL.Exceptions;
 using BLL.Models;
-using BLL.MappersBLLDAL;
 
 [TestFixture]
 public class TestGroupService
