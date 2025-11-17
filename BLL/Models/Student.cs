@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using BLL.Exceptions;
 
 namespace BLL.Models;
 
@@ -39,7 +40,7 @@ public class Student
         }
         if (!Regex.IsMatch(StudentId, @"^[A-Z]{2}\d{8}$"))
         {
-            throw new ArgumentException("Student id must be the format \"KB15280786\"");
+            throw new InvalidStudentIdFormatException("Student id must be the format \"KB15280786\"");
         }
         
     }

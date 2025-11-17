@@ -6,9 +6,9 @@ public class Menu
     private bool _isRunning = true;
 
 
-    private StudentMenu _studentMenu;
-    private GroupMenu _groupMenu;
-    private DormitoryMenu _dormitoryMenu;
+    private readonly StudentMenu _studentMenu;
+    private readonly GroupMenu _groupMenu;
+    private readonly DormitoryMenu _dormitoryMenu;
 
 
     public Menu(StudentMenu sm, GroupMenu gm, DormitoryMenu dm)
@@ -33,6 +33,9 @@ public class Menu
                     break;
                 case "3":
                     ShowDormitoryMenu();
+                    break;
+                case "0":
+                    _isRunning =  false;
                     break;
             }
         }
@@ -62,11 +65,11 @@ public class Menu
         switch (Console.ReadLine())
         {
             case "1":
-                _studentMenu.AddStudentFlow();
+                _studentMenu.AddStudent();
                 break;
 
             case "2":
-                _studentMenu.RemoveStudentFlow();
+                _studentMenu.RemoveStudent();
                 break;
 
             case "3":
@@ -96,6 +99,7 @@ public class Menu
         Console.WriteLine("4. Search by ID");
         Console.WriteLine("5. Add student");
         Console.WriteLine("6. Delete student");
+        Console.WriteLine("7. Search for a student in a group");
         Console.WriteLine("0. Back");
         Console.Write("Your choice: ");
         
@@ -111,13 +115,16 @@ public class Menu
                 _groupMenu.ShowAllGroups();
                 break;
             case "4":
-                _groupMenu.SearchByStudentID();
+                _groupMenu.SearchById();
                 break;
             case "5":
                 _groupMenu.AddStudent();
                 break;
             case "6":
                 _groupMenu.RemoveStudent();
+                break;
+            case "7":
+                _groupMenu.SearchStudent();
                 break;
             case "0":
                 return;
@@ -137,6 +144,7 @@ public class Menu
         Console.WriteLine("4. Search by ID");
         Console.WriteLine("5. Add student");
         Console.WriteLine("6. Delete student");
+        Console.WriteLine("7. Search for a student in a dormitory");
         Console.WriteLine("0. Back");
         Console.Write("Your choice: ");
         
@@ -152,13 +160,16 @@ public class Menu
                 _dormitoryMenu.ShowAllDormitory();
                 break;
             case "4":
-                _groupMenu.SearchByStudentID();
+                _dormitoryMenu.SearchById();
                 break;
             case "5":
                 _dormitoryMenu.AddStudent();
                 break;
             case "6":
                 _dormitoryMenu.RemoveStudent();
+                break;
+            case "7":
+                _dormitoryMenu.SearchStudent();
                 break;
             case "0":
                 return;

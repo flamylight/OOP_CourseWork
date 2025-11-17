@@ -1,3 +1,4 @@
+using BLL.Exceptions;
 using BLL.MappersBLLDAL;
 using DAL;
 namespace BLL.Services;
@@ -19,7 +20,7 @@ public class GroupService
         var dalGroup = _context.GetGroupById(newGroup.GroupName);
         if (dalGroup != null)
         {
-            throw new Exception("Group is already exists");
+            throw new GroupAlreadyExistsException("Group is already exists");
         }
         _context.AddGroup(newGroup.ToDAL());
     }
@@ -27,7 +28,7 @@ public class GroupService
     public void RemoveGroup(string groupName)
     {
         var group = _context.GetGroupById(groupName)?.ToBLL() ?? 
-                       throw new Exception("Group not found");
+                       throw new GroupNotFoundException("Group not found");
         
         
         var students = _context.GetStudents.Select(s => s.ToBLL()).ToList();
@@ -52,7 +53,7 @@ public class GroupService
         var group = _context.GetGroupById(groupName);
         if (group == null)
         {
-            throw new Exception("Group not found");
+            throw new GroupNotFoundException("Group not found");
         }
 
         return group.ToBLL();
@@ -63,12 +64,12 @@ public class GroupService
         var group = _context.GetGroupById(groupName);
         if (group == null)
         {
-            throw new Exception("Group not found");
+            throw new GroupNotFoundException("Group not found");
         }
         var student = _context.GetById(studentID);
         if (student == null)
         {
-            throw new Exception("Student not found");
+            throw new StudentNotFoundException("Student not found");
         }
 
         var groupBLL = group.ToBLL();
@@ -85,12 +86,12 @@ public class GroupService
         var group = _context.GetGroupById(groupName);
         if (group == null)
         {
-            throw new Exception("Group not found");
+            throw new GroupNotFoundException("Group not found");
         }
         var student = _context.GetById(studentID);
         if (student == null)
         {
-            throw new Exception("Student not found");
+            throw new StudentNotFoundException("Student not found");
         }
 
         var groupBLL = group.ToBLL();
@@ -100,6 +101,16 @@ public class GroupService
         
         _context.UpdateGroup(groupBLL.ToDAL());
         _context.UpdateStudent(studentBLL.ToDAL());
+    }
+
+    public Student GetStudent(string groupName, string studentID)
+    {
+        var student = _context.GetById(studentID);
+        if (student != null && student.Group.GroupName == groupName)
+        {
+            return student.ToBLL();
+        }
+        throw new StudentNotFoundException("Student not found");
     }
     
 }

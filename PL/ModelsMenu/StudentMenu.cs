@@ -1,3 +1,5 @@
+using BLL.Exceptions;
+
 namespace PL.ModelsMenu;
 using BLL.Services;
 using ViewModels;
@@ -12,7 +14,7 @@ public class StudentMenu
         _studentService = studentService;
     }
     
-    public void AddStudentFlow()
+    public void AddStudent()
     {
         Console.Clear();
         Console.Write("Name: ");
@@ -30,13 +32,17 @@ public class StudentMenu
     
         Console.Write("Student ID: ");
         string id = Console.ReadLine();
-    
+
         try
         {
             _studentService.AddStudent(name, lastName, course, id);
             Console.WriteLine("Student added successfully!");
         }
-        catch (Exception ex)
+        catch (InvalidStudentIdFormatException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (ArgumentException ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -45,7 +51,7 @@ public class StudentMenu
         Console.ReadLine();
     }
     
-    public void RemoveStudentFlow()
+    public void RemoveStudent()
     {
         Console.Clear();
         
@@ -55,7 +61,7 @@ public class StudentMenu
             _studentService.RemoveStudent(Console.ReadLine());
             Console.WriteLine("Student removed successfully!");
         }
-        catch (Exception ex)
+        catch (StudentNotFoundException ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -94,9 +100,9 @@ public class StudentMenu
         {
             var student = _studentService.GetStudent(Console.ReadLine());
             Console.WriteLine(student.ToPL());
-            
+
         }
-        catch (Exception ex)
+        catch (StudentNotFoundException ex)
         {
             Console.WriteLine(ex.Message);
         }

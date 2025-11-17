@@ -1,3 +1,5 @@
+using BLL.Exceptions;
+
 namespace PL.ModelsMenu;
 using BLL.Services;
 using ViewModels;
@@ -22,7 +24,11 @@ public class GroupMenu
             _groupService.AddGroup(Console.ReadLine());
             Console.WriteLine("Group created");
         }
-        catch (Exception ex)
+        catch (InvalidGroupIdFormatException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (GroupAlreadyExistsException ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -40,7 +46,7 @@ public class GroupMenu
             _groupService.RemoveGroup(Console.ReadLine());
             Console.WriteLine("Group deleted");
         }
-        catch (Exception ex)
+        catch (GroupNotFoundException ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -62,7 +68,15 @@ public class GroupMenu
             _groupService.AddStudent(groupName, studentID);
             Console.WriteLine("Student added");
         }
-        catch (Exception ex)
+        catch (GroupNotFoundException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (StudentAlreadyExistsException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (StudentNotFoundException ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -84,7 +98,11 @@ public class GroupMenu
             _groupService.RemoveStudent(groupName, studentID);
             Console.WriteLine("Student deleted");
         }
-        catch (Exception ex)
+        catch (StudentNotFoundException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (GroupNotFoundException ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -114,7 +132,7 @@ public class GroupMenu
         Console.ReadLine();
     }
     
-    public void SearchByStudentID()
+    public void SearchById()
     {
         Console.Clear();
         
@@ -122,10 +140,35 @@ public class GroupMenu
         try
         {
             var group = _groupService.GetGroup(Console.ReadLine());
+            Console.WriteLine("Found!");
             Console.WriteLine(group.ToPL());
             
         }
-        catch (Exception ex)
+        catch (GroupNotFoundException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        
+        Console.WriteLine("Press Enter to continue...");
+        Console.ReadLine();
+    }
+
+    public void SearchStudent()
+    {
+        Console.Clear();
+        
+        Console.Write("Group ID: ");
+        string groupName = Console.ReadLine();
+        Console.Write("student ID: ");
+        string studentID = Console.ReadLine();
+
+        try
+        {
+            var student = _groupService.GetStudent(groupName, studentID);
+            Console.WriteLine("Found!");
+            Console.WriteLine(student.ToPL());
+        }
+        catch (StudentNotFoundException ex)
         {
             Console.WriteLine(ex.Message);
         }

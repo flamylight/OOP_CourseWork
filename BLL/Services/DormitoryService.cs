@@ -1,3 +1,4 @@
+using BLL.Exceptions;
 using BLL.MappersBLLDAL;
 using BLL.Models;
 using DAL;
@@ -17,13 +18,13 @@ public class DormitoryService
         var dormitory = new Dormitory(id, countRooms*4);
         if (dormitory.FreeSeats < 4)
         {
-            throw new Exception("Dormitory needs at least one room");
+            throw new ArgumentException("Dormitory needs at least one room");
         }
         
         var dalDormitory = _context.GetDormitoryById(dormitory.Id);
         if (dalDormitory != null)
         {
-            throw new Exception("Dormitory already exists");
+            throw new DormitoryAlreadyExistsException("Dormitory already exists");
         }
         
         _context.AddDormitory(dormitory.ToDAL());
@@ -32,7 +33,7 @@ public class DormitoryService
     public void RemoveDormitory(int dormitoryId)
     {
         var dalDormitory = _context.GetDormitoryById(dormitoryId) ??
-                           throw new Exception("Dormitory not found");
+                           throw new DormitoryNotFoundException("Dormitory not found");
 
         var students = _context.GetStudents.Select(s => s.ToBLL()).ToList();
         if (dalDormitory.StudentsId.Count != 0)
@@ -57,7 +58,7 @@ public class DormitoryService
     public Dormitory GetDormitory(int dormitoryId)
     {
         var dormitory = _context.GetDormitoryById(dormitoryId) ??
-                        throw new Exception("Dormitory not found");
+                        throw new DormitoryNotFoundException("Dormitory not found");
         return dormitory.ToBLL();
     }
     
@@ -66,18 +67,18 @@ public class DormitoryService
         var dormitory = _context.GetDormitoryById(id);
         if (dormitory == null)
         {
-            throw new Exception("Dormitory not found");
+            throw new DormitoryNotFoundException("Dormitory not found");
         }
         var student = _context.GetById(studentID);
         if (student == null)
         {
-            throw new Exception("Student not found");
+            throw new StudentNotFoundException("Student not found");
         }
 
         var dormitoryBLL = dormitory.ToBLL();
         var studentBLL = student.ToBLL();
         dormitoryBLL.AddStudent(studentBLL);
-        
+
         _context.UpdateDormitory(dormitoryBLL.ToDAL());
         _context.UpdateStudent(studentBLL.ToDAL());
     }
@@ -87,20 +88,35 @@ public class DormitoryService
         var dormitory = _context.GetDormitoryById(id);
         if (dormitory == null)
         {
-            throw new Exception("Dormitory not found");
+            throw new DormitoryNotFoundException("Dormitory not found");
         }
         var student = _context.GetById(studentID);
         if (student == null)
         {
-            throw new Exception("Student not found");
+            throw new StudentNotFoundException("Student not found");
         }
 
         var dormitoryBLL = dormitory.ToBLL();
         var studentBLL = student.ToBLL();
         dormitoryBLL.RemoveStudent(studentBLL);
-        
+
         _context.UpdateDormitory(dormitoryBLL.ToDAL());
         studentBLL.LeaveDormitory();
         _context.UpdateStudent(studentBLL.ToDAL());
+    }
+    
+    public Student GetStudent(int dormitory, string studentID)
+    {
+        var dormitoryDal = _context.GetDormitoryById(dormitory);
+        if (dormitoryDal == null)
+        {
+            throw new DormitoryNotFoundException("Dormitory not found");
+        }
+        var student = _context.GetById(studentID);
+        if (student != null && student.Dormitory.Id == dormitory)
+        {
+            return student.ToBLL();
+        }
+        throw new StudentNotFoundException("Student not found");
     }
 }

@@ -1,3 +1,4 @@
+using BLL.Exceptions;
 using BLL.MappersBLLDAL;
 using BLL.Models;
 using DAL;
@@ -21,14 +22,14 @@ public class StudentService
         var dalStudent = _context.GetById(student.StudentId);
         if (dalStudent != null)
         {
-           throw new Exception("Student already exists");
+           throw new StudentAlreadyExistsException("Student already exists");
         }
         _context.AddStudent(student.ToDAL());
     }
 
     public void RemoveStudent(string studentId)
     {
-        var dalStudent = _context.GetById(studentId) ?? throw new Exception("Student not found");
+        var dalStudent = _context.GetById(studentId) ?? throw new StudentNotFoundException("Student not found");
         var student = dalStudent.ToBLL();
 
         if (student.Dormitory != null)
@@ -55,7 +56,7 @@ public class StudentService
     public Student GetStudent(string studentId)
     {
         return _context.GetById(studentId)?.ToBLL() ??
-               throw new Exception("Student not found");;
+               throw new StudentNotFoundException("Student not found");;
     }
     
 }

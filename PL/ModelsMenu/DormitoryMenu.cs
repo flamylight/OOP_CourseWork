@@ -1,3 +1,5 @@
+using BLL.Exceptions;
+
 namespace PL.ModelsMenu;
 using BLL.Services;
 using ViewModels;
@@ -23,22 +25,26 @@ public class DormitoryMenu
         var checkId = int.TryParse(Console.ReadLine(), out id);
         if (checkId == false)
         {
-            throw new Exception("ID dormitory must be an integer");
+            Console.WriteLine("ID dormitory must be an integer");
         }
         
         Console.Write("Rooms count: ");
         var checkRooms = int.TryParse(Console.ReadLine(), out CountRooms);
         if (checkRooms == false)
         {
-            throw new Exception("Count rooms must be an integer");
+            Console.WriteLine("Count rooms must be an integer");
         }
-        
+
         try
         {
             _dormitoryService.AddDormitory(id, CountRooms);
             Console.WriteLine("Dormitory created");
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (DormitoryAlreadyExistsException ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -55,7 +61,7 @@ public class DormitoryMenu
         var checkId = int.TryParse(Console.ReadLine(), out id);
         if (checkId == false)
         {
-            throw new Exception("ID dormitory must be an integer");
+            Console.WriteLine("ID dormitory must be an integer");
         }
         
         try
@@ -63,7 +69,7 @@ public class DormitoryMenu
             _dormitoryService.RemoveDormitory(id);
             Console.WriteLine("Dormitory deleted");
         }
-        catch (Exception ex)
+        catch (DormitoryNotFoundException ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -102,17 +108,29 @@ public class DormitoryMenu
         var checkId = int.TryParse(Console.ReadLine(), out id);
         if (checkId == false)
         {
-            throw new Exception("ID dormitory must be an integer");
+            Console.WriteLine("ID dormitory must be an integer");
         }
         Console.Write("Student ID: ");
         string studentID = Console.ReadLine();
-        
+
         try
         {
             _dormitoryService.AddStudent(id, studentID);
             Console.WriteLine("Student added");
         }
-        catch (Exception ex)
+        catch (StudentNotFoundException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (DormitoryNotFoundException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (StudentAlreadyExistsException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (DormitoryFullException ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -130,17 +148,82 @@ public class DormitoryMenu
         var checkId = int.TryParse(Console.ReadLine(), out id);
         if (checkId == false)
         {
-            throw new Exception("ID dormitory must be an integer");
+            Console.WriteLine("ID dormitory must be an integer");
         }
         Console.Write("Student ID: ");
         string studentID = Console.ReadLine();
-        
+
         try
         {
             _dormitoryService.RemoveStudent(id, studentID);
             Console.WriteLine("Student deleted");
         }
-        catch (Exception ex)
+        catch (StudentNotFoundException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (DormitoryNotFoundException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        
+        Console.WriteLine("Press Enter to continue...");
+        Console.ReadLine();
+    }
+    
+    public void SearchById()
+    {
+        Console.Clear();
+        
+        Console.Write("Dormitory ID: ");
+        int id;
+        var checkId = int.TryParse(Console.ReadLine(), out id);
+        if (checkId == false)
+        {
+            Console.WriteLine("ID dormitory must be an integer");
+        }
+        
+        try
+        {
+            var group = _dormitoryService.GetDormitory(id);
+            Console.WriteLine("Found!");
+            Console.WriteLine(group.ToPL());
+            
+        }
+        catch (DormitoryNotFoundException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        
+        Console.WriteLine("Press Enter to continue...");
+        Console.ReadLine();
+    }
+    
+    public void SearchStudent()
+    {
+        Console.Clear();
+        
+        Console.Write("ID dormitory: ");
+        int id;
+        var checkId = int.TryParse(Console.ReadLine(), out id);
+        if (checkId == false)
+        {
+            Console.WriteLine("ID dormitory must be an integer");
+        }
+        Console.Write("Student ID: ");
+        string studentID = Console.ReadLine();
+
+        try
+        {
+            var student = _dormitoryService.GetStudent(id, studentID);
+            Console.WriteLine("Found!");
+            Console.WriteLine(student.ToPL());
+        }
+        catch (StudentNotFoundException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (DormitoryNotFoundException ex)
         {
             Console.WriteLine(ex.Message);
         }

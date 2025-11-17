@@ -1,3 +1,5 @@
+using BLL.Exceptions;
+
 namespace BLL.Models;
 
 public class Dormitory
@@ -18,12 +20,12 @@ public class Dormitory
     {
         if (FreeSeats == 0)
         {
-            throw new Exception("No seats available");
+            throw new DormitoryFullException("No seats available");
         }
 
         if (StudentsIds.Contains(student.StudentId))
         {
-            throw new Exception("Student already exists");
+            throw new StudentAlreadyExistsException("Student already exists");
         }
         StudentsIds.Add(student.StudentId);
         student.AssignDormitory(this);
@@ -34,7 +36,7 @@ public class Dormitory
     {
         if (!StudentsIds.Contains(student.StudentId))
         {
-            throw new Exception("No student found in dormitory");
+            throw new StudentNotFoundException("No student found in dormitory");
         }
         StudentsIds.Remove(student.StudentId);
         FreeSeats++;

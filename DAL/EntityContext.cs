@@ -3,7 +3,7 @@ using DAL.DataProvider;
 
 namespace DAL;
 
-public class EntityContext
+public class EntityContext: IEntityContext
 {
     private readonly IDataProvider<StudentEntity> _studentsProvider;
     private readonly IDataProvider<GroupEntity> _groupsProvider;
@@ -17,7 +17,7 @@ public class EntityContext
         _dormitoriesProvider = dormitories;
         
     }
-    
+
 
     public List<StudentEntity> GetStudents => _studentsProvider.Load();
     public List<GroupEntity> GetGroups => _groupsProvider.Load();
@@ -31,7 +31,7 @@ public class EntityContext
     {
         var students = GetStudents.ToList();
         students.Add(student);
-        _studentsProvider.Save(students);
+        SaveStudents(students);
     }
 
     public StudentEntity? GetById(string studentId)
@@ -45,7 +45,7 @@ public class EntityContext
     {
         var groups = GetGroups.ToList();
         groups.Add(group);
-        _groupsProvider.Save(groups);
+        SaveGroups(groups);
     }
 
     public GroupEntity? GetGroupById(string groupName)
@@ -56,14 +56,14 @@ public class EntityContext
 
     public List<GroupEntity> AllGroups()
     {
-        return _groupsProvider.Load();
+        return GetGroups.ToList();;
     }
 
     public void AddDormitory(DormitoryEntity dormitory)
     {
         var dormitories = GetDormitories.ToList();
         dormitories.Add(dormitory);
-        _dormitoriesProvider.Save(dormitories);
+        SaveDormitory(dormitories);
     }
     
     public DormitoryEntity? GetDormitoryById(int dormitoriesId)
@@ -80,7 +80,7 @@ public class EntityContext
             if (dor.Id == dormitory.Id)
             {
                 dormitories.Remove(dor);
-                _dormitoriesProvider.Save(dormitories);
+                SaveDormitory(dormitories);
                 break;
             }
         }
@@ -94,7 +94,7 @@ public class EntityContext
             if (stud.StudentId == student.StudentId)
             {
                 students.Remove(stud);
-                _studentsProvider.Save(students);
+                SaveStudents(students);
                 break;
             }
         }
@@ -108,7 +108,7 @@ public class EntityContext
             if (gr.GroupName == group.GroupName)
             {
                 groups.Remove(gr);
-                _groupsProvider.Save(groups);
+                SaveGroups(groups);
                 break;
             }
         }
@@ -119,29 +119,23 @@ public class EntityContext
     {
         var students = GetStudents.ToList();
         var index = students.FindIndex(s => s.StudentId == student.StudentId);
-        if (index == -1) throw new Exception("Student not found");
-
         students[index] = student; 
-        _studentsProvider.Save(students);
+        SaveStudents(students);
     }
     
     public void UpdateGroup(GroupEntity group)
     {
         var groups = GetGroups.ToList();
         var index = groups.FindIndex(s => s.GroupName == group.GroupName);
-        if (index == -1) throw new Exception("Group not found");
-
         groups[index] = group; 
-        _groupsProvider.Save(groups);
+        SaveGroups(groups);
     }
     
     public void UpdateDormitory(DormitoryEntity dormitory)
     {
         var dormitories = GetDormitories.ToList();
         var index = dormitories.FindIndex(s => s.Id == dormitory.Id);
-        if (index == -1) throw new Exception("Group not found");
-
         dormitories[index] = dormitory; 
-        _dormitoriesProvider.Save(dormitories);
+        SaveDormitory(dormitories);
     }
 }

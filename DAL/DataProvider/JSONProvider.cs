@@ -1,5 +1,4 @@
 using System.Text.Json;
-
 namespace DAL.DataProvider;
 
 public class JSONProvider<T>: IDataProvider<T>

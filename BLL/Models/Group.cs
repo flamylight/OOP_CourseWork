@@ -1,3 +1,5 @@
+using BLL.Exceptions;
+
 namespace BLL.Models;
 using System.Text.RegularExpressions;
 
@@ -18,7 +20,7 @@ public class Group
     {
         if (StudentsId.Contains(student.StudentId))
         {
-            throw new Exception("Student already exists");
+            throw new StudentAlreadyExistsException("Student already exists");
         }
         StudentsId.Add(student.StudentId);
     }
@@ -27,7 +29,7 @@ public class Group
     {
         if (!StudentsId.Contains(student.StudentId))
         {
-            throw new ArgumentException("Student not found");
+            throw new StudentNotFoundException("Student not found");
         }
         StudentsId.Remove(student.StudentId);
     }
@@ -36,7 +38,7 @@ public class Group
     {
         if (!Regex.IsMatch(GroupName, @"^[A-Z]{1}-\d{3}-\d{2}-\d{1}-[A-Z]{2}$"))
         {
-            throw new ArgumentException("Group id must be the format \"B-121-24-2-PI\"");
+            throw new InvalidGroupIdFormatException("Group id must be the format \"B-121-24-2-PI\"");
         }
     }
 }
