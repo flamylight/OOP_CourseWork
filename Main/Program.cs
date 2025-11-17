@@ -21,8 +21,9 @@ class Program
         
         StudentMenu sm = new StudentMenu(ss);
         GroupMenu gm = new GroupMenu(gs);
+        DormitoryMenu dm = new DormitoryMenu(ds);
         
-        Menu menu = new Menu(sm, gm);
+        Menu menu = new Menu(sm, gm, dm);
         menu.Run();
     }
     

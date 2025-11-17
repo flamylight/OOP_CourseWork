@@ -10,7 +10,6 @@ public class Student
     public string StudentId { get; set; }
     public Group Group { get; set; }
     public Dormitory Dormitory { get; set; }
-    public int RoomId { get; set; }
 
     public Student(){}
     
@@ -45,23 +44,23 @@ public class Student
         
     }
 
-    public void AddGroup(Group group)
+    public void AssignGroup(Group group)
     {
-        if (Group != null)
-        {
-            throw new Exception("Group is already assigned");
-        }
         Group = group;
     }
-
-    public void RemoveGroup()
+    
+    public void LeaveGroup()
     {
         Group = null;
     }
-    
-    public void MoveOut()
+
+    public void LeaveDormitory()
     {
         Dormitory = null;
-        RoomId = 0;
+    }
+
+    public void AssignDormitory(Dormitory dormitory)
+    {
+        Dormitory = dormitory;
     }
 }

@@ -9,7 +9,8 @@ public static class DormitoryBLLDAL
         return new DormitoryEntity
         {
             Id = bll.Id,
-            Rooms = bll.Rooms.Select(r => r.ToDAL()).ToList()
+            FreeSeats = bll.FreeSeats,
+            StudentsId = bll.StudentsIds
         };
     }
 
@@ -18,7 +19,8 @@ public static class DormitoryBLLDAL
         return new Dormitory
         {
             Id = dal.Id,
-            Rooms = dal.Rooms.Select(r => r.ToBLL()).ToList()
+            FreeSeats = dal.FreeSeats,
+            StudentsIds = dal.StudentsId
         };
     }
 }

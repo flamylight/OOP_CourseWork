@@ -40,12 +40,7 @@ public class EntityContext
         return students.FirstOrDefault(s => s.StudentId == studentId);
     }
 
-    public List<StudentEntity> AllStudents()
-    {
-        return _studentsProvider.Load();
-    }
     
-
     public void AddGroup(GroupEntity group)
     {
         var groups = GetGroups.ToList();
@@ -138,5 +133,15 @@ public class EntityContext
 
         groups[index] = group; 
         _groupsProvider.Save(groups);
+    }
+    
+    public void UpdateDormitory(DormitoryEntity dormitory)
+    {
+        var dormitories = GetDormitories.ToList();
+        var index = dormitories.FindIndex(s => s.Id == dormitory.Id);
+        if (index == -1) throw new Exception("Group not found");
+
+        dormitories[index] = dormitory; 
+        _dormitoriesProvider.Save(dormitories);
     }
 }

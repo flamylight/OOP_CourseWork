@@ -8,12 +8,14 @@ public class Menu
 
     private StudentMenu _studentMenu;
     private GroupMenu _groupMenu;
+    private DormitoryMenu _dormitoryMenu;
 
 
-    public Menu(StudentMenu sm, GroupMenu gm)
+    public Menu(StudentMenu sm, GroupMenu gm, DormitoryMenu dm)
     {
         _studentMenu = sm;
         _groupMenu = gm;
+        _dormitoryMenu = dm;
     }
 
     public void Run()
@@ -27,7 +29,10 @@ public class Menu
                     ShowStudentMenu();
                     break;
                 case "2":
-                    ShowGroupsMenu();
+                    ShowGroupMenu();
+                    break;
+                case "3":
+                    ShowDormitoryMenu();
                     break;
             }
         }
@@ -81,7 +86,7 @@ public class Menu
         }
     }
 
-    private void ShowGroupsMenu()
+    private void ShowGroupMenu()
     {
         Console.Clear();
 
@@ -113,6 +118,47 @@ public class Menu
                 break;
             case "6":
                 _groupMenu.RemoveStudent();
+                break;
+            case "0":
+                return;
+            default:
+                Console.WriteLine("Invalid input!");
+                break;
+        }
+    }
+    
+    private void ShowDormitoryMenu()
+    {
+        Console.Clear();
+
+        Console.WriteLine("1. Add dormitory");
+        Console.WriteLine("2. Delete dormitory");
+        Console.WriteLine("3. Show all dormitories");
+        Console.WriteLine("4. Search by ID");
+        Console.WriteLine("5. Add student");
+        Console.WriteLine("6. Delete student");
+        Console.WriteLine("0. Back");
+        Console.Write("Your choice: ");
+        
+        switch (Console.ReadLine())
+        {
+            case "1":
+                _dormitoryMenu.CreateDormitory();
+                break;
+            case "2":
+                _dormitoryMenu.DeleteDormitory();
+                break;
+            case "3":
+                _dormitoryMenu.ShowAllDormitory();
+                break;
+            case "4":
+                _groupMenu.SearchByStudentID();
+                break;
+            case "5":
+                _dormitoryMenu.AddStudent();
+                break;
+            case "6":
+                _dormitoryMenu.RemoveStudent();
                 break;
             case "0":
                 return;

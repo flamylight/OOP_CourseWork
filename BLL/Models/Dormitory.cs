@@ -3,48 +3,40 @@ namespace BLL.Models;
 public class Dormitory
 {
     public int Id { get; set; }
-    public List<Room> Rooms { get; set; } = new();
-    public int CountPlaces => Rooms.Count * 4;
+    public List<string> StudentsIds { get; set; } = new();
+    public int FreeSeats { get; set; }
 
     public Dormitory(){}
     
     public Dormitory(int id, int rooms)
     {
         Id = id;
-
-        for (int i = 0; i < rooms; i++)
-        {
-            Rooms.Add(new Room(i));
-        }
+        FreeSeats = rooms;
     }
 
     public void AddStudent(Student student)
     {
-        if (CountPlaces == 0)
+        if (FreeSeats == 0)
         {
             throw new Exception("No seats available");
         }
-        foreach (var room in Rooms)
+
+        if (StudentsIds.Contains(student.StudentId))
         {
-            if (room.CountStudents < 4)
-            {
-                room.AddStudent(student);
-                student.Dormitory = this;
-            }
+            throw new Exception("Student already exists");
         }
+        StudentsIds.Add(student.StudentId);
+        student.AssignDormitory(this);
+        FreeSeats--;
     }
 
     public void RemoveStudent(Student student)
     {
-        foreach (var room in Rooms)
+        if (!StudentsIds.Contains(student.StudentId))
         {
-            if (room.Students.Contains(student))
-            {
-                room.RemoveStudent(student);
-                student.Dormitory = null;
-                return;
-            }
+            throw new Exception("No student found in dormitory");
         }
-        throw new Exception("No student found in dormitory");
+        StudentsIds.Remove(student.StudentId);
+        FreeSeats++;
     }
 }

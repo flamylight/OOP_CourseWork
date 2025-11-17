@@ -28,25 +28,28 @@ public class StudentService
 
     public void RemoveStudent(string studentId)
     {
-        var allStudents = _context.AllStudents()?.Select(s => s.ToBLL());
-        var student = allStudents.FirstOrDefault(s => s.StudentId == studentId) ??
-                      throw new Exception("Student not found");
+        var dalStudent = _context.GetById(studentId) ?? throw new Exception("Student not found");
+        var student = dalStudent.ToBLL();
 
         if (student.Dormitory != null)
         {
             student.Dormitory.RemoveStudent(student);
+            _context.UpdateDormitory(student.Dormitory.ToDAL());
+            student.LeaveDormitory();
         }
 
         if (student.Group != null)
         {
             student.Group.RemoveStudent(student);
+            _context.UpdateGroup(student.Group.ToDAL());
+            student.LeaveGroup();
         }
         _context.RemoveStudent(student.ToDAL());
     }
 
     public List<Student> AllStudents()
     {
-        return _context.AllStudents().Select(s => s.ToBLL()).ToList();
+        return _context.GetStudents.Select(s => s.ToBLL()).ToList();
     }
 
     public Student GetStudent(string studentId)

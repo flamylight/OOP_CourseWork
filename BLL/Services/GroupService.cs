@@ -30,12 +30,12 @@ public class GroupService
                        throw new Exception("Group not found");
         
         
-        var students = _context.AllStudents().Select(s => s.ToBLL()).ToList();
+        var students = _context.GetStudents.Select(s => s.ToBLL()).ToList();
         foreach (var student in students)
         {
             if (student.Group != null && student.Group.GroupName == group.GroupName)
             {
-                student.Group = null;
+                student.LeaveGroup();
             }
         }
         _context.SaveStudents(students.Select(s => s.ToDAL()).ToList());
@@ -74,7 +74,7 @@ public class GroupService
         var groupBLL = group.ToBLL();
         var studentBLL = student.ToBLL();
         groupBLL.AddStudent(studentBLL);
-        studentBLL.AddGroup(groupBLL);
+        studentBLL.AssignGroup(groupBLL);
         
         _context.UpdateGroup(groupBLL.ToDAL());
         _context.UpdateStudent(studentBLL.ToDAL());
@@ -96,7 +96,7 @@ public class GroupService
         var groupBLL = group.ToBLL();
         var studentBLL = student.ToBLL();
         groupBLL.RemoveStudent(studentBLL);
-        studentBLL.RemoveGroup();
+        studentBLL.LeaveGroup();
         
         _context.UpdateGroup(groupBLL.ToDAL());
         _context.UpdateStudent(studentBLL.ToDAL());
