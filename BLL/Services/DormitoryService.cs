@@ -2,13 +2,15 @@ using BLL.Exceptions;
 using BLL.MappersBLLDAL;
 using BLL.Models;
 using DAL;
+using DAL.DataProvider;
+
 namespace BLL.Services;
 
 public class DormitoryService
 {
-    private readonly EntityContext _context;
+    private readonly IEntityContext _context;
 
-    public DormitoryService(EntityContext context)
+    public DormitoryService(IEntityContext context)
     {
         _context = context;
     }

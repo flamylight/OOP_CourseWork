@@ -2,15 +2,16 @@ using BLL.Exceptions;
 using BLL.MappersBLLDAL;
 using BLL.Models;
 using DAL;
+using DAL.DataProvider;
 
 
 namespace BLL.Services;
 
 public class StudentService
 {
-    private readonly EntityContext _context;
+    private readonly IEntityContext _context;
 
-    public StudentService(EntityContext context)
+    public StudentService(IEntityContext context)
     {
         _context = context;
     }

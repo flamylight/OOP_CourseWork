@@ -1,14 +1,16 @@
 using BLL.Exceptions;
 using BLL.MappersBLLDAL;
 using DAL;
+using DAL.DataProvider;
+
 namespace BLL.Services;
 using Models;
 
 public class GroupService
 {
-    private readonly EntityContext _context;
+    private readonly IEntityContext _context;
 
-    public GroupService(EntityContext context)
+    public GroupService(IEntityContext context)
     {
         _context = context;
     }
@@ -45,7 +47,7 @@ public class GroupService
 
     public List<Group> AllGroups()
     {
-        return _context.AllGroups().Select(g => g.ToBLL()).ToList();
+        return _context.GetGroups.Select(g => g.ToBLL()).ToList();
     }
 
     public Group GetGroup(string groupName)
