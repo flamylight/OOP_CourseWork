@@ -32,21 +32,21 @@ public class StudentService
         var student = allStudents.FirstOrDefault(s => s.StudentId == studentId) ??
                       throw new Exception("Student not found");
 
-        if (student.DormitoryId != null)
+        if (student.Dormitory != null)
         {
-            student.DormitoryId.RemoveStudent(student);
+            student.Dormitory.RemoveStudent(student);
         }
 
-        if (student.GroupId != null)
+        if (student.Group != null)
         {
-            student.GroupId.RemoveStudent(student);
+            student.Group.RemoveStudent(student);
         }
         _context.RemoveStudent(student.ToDAL());
     }
 
     public List<Student> AllStudents()
     {
-        return _context.AllStudents()?.Select(s => s.ToBLL()).ToList();
+        return _context.AllStudents().Select(s => s.ToBLL()).ToList();
     }
 
     public Student GetStudent(string studentId)

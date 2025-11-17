@@ -7,12 +7,13 @@ public class Menu
 
 
     private StudentMenu _studentMenu;
+    private GroupMenu _groupMenu;
 
 
-    public Menu(StudentMenu sm)
+    public Menu(StudentMenu sm, GroupMenu gm)
     {
         _studentMenu = sm;
-
+        _groupMenu = gm;
     }
 
     public void Run()
@@ -26,6 +27,7 @@ public class Menu
                     ShowStudentMenu();
                     break;
                 case "2":
+                    ShowGroupsMenu();
                     break;
             }
         }
@@ -73,6 +75,47 @@ public class Menu
             case "0":
                 return;
 
+            default:
+                Console.WriteLine("Invalid input!");
+                break;
+        }
+    }
+
+    private void ShowGroupsMenu()
+    {
+        Console.Clear();
+
+        Console.WriteLine("1. Add group");
+        Console.WriteLine("2. Delete group");
+        Console.WriteLine("3. Show all groups");
+        Console.WriteLine("4. Search by ID");
+        Console.WriteLine("5. Add student");
+        Console.WriteLine("6. Delete student");
+        Console.WriteLine("0. Back");
+        Console.Write("Your choice: ");
+        
+        switch (Console.ReadLine())
+        {
+            case "1":
+                _groupMenu.CreateGroup();
+                break;
+            case "2":
+                _groupMenu.DeleteGroup();
+                break;
+            case "3":
+                _groupMenu.ShowAllGroups();
+                break;
+            case "4":
+                _groupMenu.SearchByStudentID();
+                break;
+            case "5":
+                _groupMenu.AddStudent();
+                break;
+            case "6":
+                _groupMenu.RemoveStudent();
+                break;
+            case "0":
+                return;
             default:
                 Console.WriteLine("Invalid input!");
                 break;

@@ -20,8 +20,9 @@ class Program
         DormitoryService ds = new DormitoryService(ec);
         
         StudentMenu sm = new StudentMenu(ss);
+        GroupMenu gm = new GroupMenu(gs);
         
-        Menu menu = new Menu(sm);
+        Menu menu = new Menu(sm, gm);
         menu.Run();
     }
     

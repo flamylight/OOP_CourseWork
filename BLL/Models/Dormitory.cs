@@ -29,7 +29,7 @@ public class Dormitory
             if (room.CountStudents < 4)
             {
                 room.AddStudent(student);
-                student.DormitoryId = this;
+                student.Dormitory = this;
             }
         }
     }
@@ -41,7 +41,7 @@ public class Dormitory
             if (room.Students.Contains(student))
             {
                 room.RemoveStudent(student);
-                student.DormitoryId = null;
+                student.Dormitory = null;
                 return;
             }
         }

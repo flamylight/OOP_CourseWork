@@ -19,8 +19,8 @@ public class EntityContext
     }
     
 
-    private List<StudentEntity> GetStudents => _studentsProvider.Load();
-    private List<GroupEntity> GetGroups => _groupsProvider.Load();
+    public List<StudentEntity> GetStudents => _studentsProvider.Load();
+    public List<GroupEntity> GetGroups => _groupsProvider.Load();
     public List<DormitoryEntity> GetDormitories => _dormitoriesProvider.Load();
     
     public void SaveStudents(List<StudentEntity> students) => _studentsProvider.Save(students);
@@ -103,5 +103,40 @@ public class EntityContext
                 break;
             }
         }
+    }
+    
+    public void RemoveGroup(GroupEntity group)
+    {
+        var groups = GetGroups.ToList();
+        foreach (var gr in groups)
+        {
+            if (gr.GroupName == group.GroupName)
+            {
+                groups.Remove(gr);
+                _groupsProvider.Save(groups);
+                break;
+            }
+        }
+    }
+    
+    
+    public void UpdateStudent(StudentEntity student)
+    {
+        var students = GetStudents.ToList();
+        var index = students.FindIndex(s => s.StudentId == student.StudentId);
+        if (index == -1) throw new Exception("Student not found");
+
+        students[index] = student; 
+        _studentsProvider.Save(students);
+    }
+    
+    public void UpdateGroup(GroupEntity group)
+    {
+        var groups = GetGroups.ToList();
+        var index = groups.FindIndex(s => s.GroupName == group.GroupName);
+        if (index == -1) throw new Exception("Group not found");
+
+        groups[index] = group; 
+        _groupsProvider.Save(groups);
     }
 }
